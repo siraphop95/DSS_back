@@ -1,7 +1,7 @@
 var express = require('express')
 var bodyParser = require('body-parser');
 const MongoClient = require('mongodb').MongoClient;
-
+var cors = require('cors')
 
 
 
@@ -23,7 +23,7 @@ mongoose.connect('mongodb+srv://siraphop95:dss123456@cluster0-360oz.gcp.mongodb.
     console.log('Successfully connected');
 })
 
-
+app.use(cors())
 app.use(bodyParser.urlencoded({ extended: true}))
 app.use(bodyParser.json())
 app.use(function (req, res, next) {

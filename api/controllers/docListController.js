@@ -2,62 +2,124 @@
 var mongoose = require('mongoose')
 Doc = mongoose.model('Documents')
 User = mongoose.model('Users')
+var jwt = require('jsonwebtoken')
 
-exports.listAllDocuments = function(req, res){
-    var query = { sort: { createdDate: 1 } }
-    Doc.find({}, null, query, function(err, doc){
-        if(err) throw err
-        //console.log("user")
-        res.json(doc)
-    })
+exports.listAllDocuments = function (req, res) {
+    ensureToken(req, res)
+    jwt.verify(req.token, 'Secret', function (err, data) {
+        if (err) {
+            res.sendStatus(403);
+        } else {
+            //if Authenticated
+            var query = { sort: { createdDate: 1 } }
+            Doc.find({}, null, query, function (err, doc) {
+                if (err) throw err
+                //console.log("user")
+                res.json(doc)
+            })
+            //Fin
+        }
+    });
+
 }
 
-exports.createADocument = function(req, res){
-    var newDoc = new Doc(req.body)
-    
-    newDoc.save(function(err, doc){
-        if(err) throw err
-        res.json(doc)
-    })
+exports.createADocument = function (req, res) {
+
+    ensureToken(req, res)
+    jwt.verify(req.token, 'Secret', function (err, data) {
+        if (err) {
+            res.sendStatus(403);
+        } else {
+            //if Authenticated
+            var newDoc = new Doc(req.body)
+            newDoc.save(function (err, doc) {
+                if (err) throw err
+                res.json(doc)
+            })
+            //Fin
+        }
+    });
+
 }
-exports.listNewDocuments = function(req, res){
-    var query = { sort: { createdDate: 1 } }
+exports.listNewDocuments = function (req, res) {
 
-    Doc.find({ medicalPersonalUsername: 'x' }, null, query, function(err, doc){
-        if(err) throw err
-        //console.log(user)
-        res.json(doc)
-    })
+    ensureToken(req, res)
+    jwt.verify(req.token, 'Secret', function (err, data) {
+        if (err) {
+            res.sendStatus(403);
+        } else {
+            //if Authenticated
+            var query = { sort: { createdDate: 1 } }
+            Doc.find({ medicalPersonalUsername: 'x' }, null, query, function (err, doc) {
+                if (err) throw err
+                //console.log(user)
+                res.json(doc)
+            })
+            //Fin
+        }
+    });
+
 }
 
-exports.listQnDocuments = function(req, res){
-    var query = { sort: { createdDate: 1 } }
+exports.listQnDocuments = function (req, res) {
 
-    Doc.find({ clientUsername: req.params.username }, null, query, function(err, doc){
-        if(err) throw err
-        //console.log(user)
-        res.json(doc)
-    })
+    ensureToken(req, res)
+    jwt.verify(req.token, 'Secret', function (err, data) {
+        if (err) {
+            res.sendStatus(403);
+        } else {
+            //if Authenticated
+            var query = { sort: { createdDate: 1 } }
+
+            Doc.find({ clientUsername: req.params.username }, null, query, function (err, doc) {
+                if (err) throw err
+                //console.log(user)
+                res.json(doc)
+            })
+            //Fin
+        }
+    });
+
 }
 
-exports.listAnsDocuments = function(req, res){
-    var query = { sort: { createdDate: 1 } }
+exports.listAnsDocuments = function (req, res) {
 
-    Doc.find({ medicalPersonalUsername: req.params.username }, null, query, function(err, doc){
-        if(err) throw err
-        //console.log(user)
-        res.json(doc)
-    })
+    ensureToken(req, res)
+    jwt.verify(req.token, 'Secret', function (err, data) {
+        if (err) {
+            res.sendStatus(403);
+        } else {
+            //if Authenticated
+            var query = { sort: { createdDate: 1 } }
+
+            Doc.find({ medicalPersonalUsername: req.params.username }, null, query, function (err, doc) {
+                if (err) throw err
+                //console.log(user)
+                res.json(doc)
+            })
+            //Fin
+        }
+    });
+
 }
 
-exports.readADocument = function(req, res){
-    //console.log(req.params.docId)
-    //console.log("test")
-    Doc.findById(req.params.docId, function(err, doc){
-        if(err) throw err
-        
-        res.json(doc)
-    })
+exports.readADocument = function (req, res) {
+
+    ensureToken(req, res)
+    jwt.verify(req.token, 'Secret', function (err, data) {
+        if (err) {
+            res.sendStatus(403);
+        } else {
+            //if Authenticated
+            Doc.findById(req.params.docId, function (err, doc) {
+                if (err) throw err
+
+                res.json(doc)
+            })
+            //Fin
+        }
+    });
+
 }
 /*
 exports.deleteAUser = function(req, res){
@@ -73,15 +135,37 @@ exports.deleteAUser = function(req, res){
 }
 
 */
-exports.updateADocument = function(req, res){
-    console.log(req.params.docId)
-    var newDoc = {}
-    newDoc = req.body
-    console.log(newDoc)
-    Doc.findByIdAndUpdate(req.params.docId, newDoc, {new: true}, function(err, doc){
-        if(err) throw err
-        console.log(doc)
-        res.json(doc)
-    })
-    
+exports.updateADocument = function (req, res) {
+
+    ensureToken(req, res)
+    jwt.verify(req.token, 'Secret', function (err, data) {
+        if (err) {
+            res.sendStatus(403);
+        } else {
+            //if Authenticated
+            console.log(req.params.docId)
+            var newDoc = {}
+            newDoc = req.body
+            console.log(newDoc)
+            Doc.findByIdAndUpdate(req.params.docId, newDoc, { new: true }, function (err, doc) {
+                if (err) throw err
+                console.log(doc)
+                res.json(doc)
+            })
+            //Fin
+        }
+    });
+
+
+}
+
+function ensureToken(req, res, next) {
+    const bearerHeader = req.headers["authorization"];
+    if (typeof bearerHeader !== 'undefined') {
+        const bearer = bearerHeader.split(" ");
+        const bearerToken = bearer[1];
+        req.token = bearerToken;
+    } else {
+        return 403;
+    }
 }

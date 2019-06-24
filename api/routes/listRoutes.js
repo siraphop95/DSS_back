@@ -1,4 +1,6 @@
 'use strict'
+
+
 module.exports = function (app) {
     var userList = require('../controllers/userListController')
     var docList = require('../controllers/docListController')
@@ -26,12 +28,12 @@ module.exports = function (app) {
 
     app.route('/ans_documents/:username')
         .get(docList.listAnsDocuments)
-    
+
     app.route('/documents/:docId')
         .get(docList.readADocument)
-    //    .delete(docList.deleteADocument)
+        //    .delete(docList.deleteADocument)
         .post(docList.updateADocument)
-    
+
     app.route('/drugs')
         .get(drugList.listAllDrugs)
         .post(drugList.createADrug)
@@ -40,4 +42,7 @@ module.exports = function (app) {
         .post(authen.login)
     app.route('/logout/:token')
         .get(authen.logout)
+    app.route('/authentication')
+        .get(authen.authentication)
 }
+
