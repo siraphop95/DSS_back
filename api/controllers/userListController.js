@@ -26,24 +26,30 @@ exports.listAllUsers = function (req, res) {
 }
 
 exports.createAUser = function (req, res) {
-    ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
-        if (err) {
-            res.sendStatus(403);
-        } else {
-            //if Authenticated
+
             var newUser = new User(req.body)
-            const saltRounds = 10;
-            bcrypt.hash(newUser.password, saltRounds).then(function (hash) {
-                newUser.password = hash
-                newUser.save(function (err, user) {
-                    if (err) throw err
-                    res.json(user)
-                })
-            });
-            //Fin
-        }
-    });
+            var query = { sort: { firstName: 1 } }
+            User.find({username: newUser.username}, null, query, function (err, user) {
+                if (err) throw err
+
+                if(typeof user[0]!=='undefined'){
+                    //username already exist
+                    res.sendStatus(201)
+                
+                }
+                else {
+                    //username not exist
+                    const saltRounds = 10;
+                    bcrypt.hash(newUser.password, saltRounds).then(function (hash) {
+                        newUser.password = hash
+                        newUser.save(function (err, user) {
+                            if (err) throw err
+                            res.json(user)
+                        })
+                    });
+                }
+            })
+            
 }
 
 exports.readAUser = function (req, res) {

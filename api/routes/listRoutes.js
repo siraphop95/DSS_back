@@ -20,14 +20,17 @@ module.exports = function (app) {
         .get(docList.listAllDocuments)
         .post(docList.createADocument)
 
-    app.route('/new_documents/')
-        .get(docList.listNewDocuments)
+    app.route('/new_questions/')
+        .get(docList.listNewQuestions)
 
-    app.route('/qn_documents/:username')
-        .get(docList.listQnDocuments)
+    app.route('/myqn_documents/:username')
+        .get(docList.listMyQnDocuments)
 
-    app.route('/ans_documents/:username')
-        .get(docList.listAnsDocuments)
+    app.route('/myans_documents/:username')
+        .get(docList.listMyAnsDocuments)
+
+    app.route('/reply_inbox_documents/:username')
+        .get(docList.listreplyInboxDocuments)
 
     app.route('/documents/:docId')
         .get(docList.readADocument)

@@ -43,6 +43,9 @@ var DocSchema = new Schema({
     purpose: {
         
     },
+    fileURL: {
+
+    },
     respondTime: {
         type: String
     },
@@ -58,6 +61,9 @@ var DocSchema = new Schema({
         type: String
     },
     medicalPersonalUsername: {
+        type: String
+    },
+    revisedQuestion: {
         type: String
     }
 })

@@ -41,7 +41,7 @@ exports.createADocument = function (req, res) {
     });
 
 }
-exports.listNewDocuments = function (req, res) {
+exports.listNewQuestions = function (req, res) {
 
     ensureToken(req, res)
     jwt.verify(req.token, 'Secret', function (err, data) {
@@ -61,7 +61,7 @@ exports.listNewDocuments = function (req, res) {
 
 }
 
-exports.listQnDocuments = function (req, res) {
+exports.listMyQnDocuments = function (req, res) {
 
     ensureToken(req, res)
     jwt.verify(req.token, 'Secret', function (err, data) {
@@ -71,7 +71,7 @@ exports.listQnDocuments = function (req, res) {
             //if Authenticated
             var query = { sort: { createdDate: 1 } }
 
-            Doc.find({ clientUsername: req.params.username }, null, query, function (err, doc) {
+            Doc.find({ clientUsername: req.params.username , medicalPersonalUsername: 'x'}, null, query, function (err, doc) {
                 if (err) throw err
                 //console.log(user)
                 res.json(doc)
@@ -82,7 +82,7 @@ exports.listQnDocuments = function (req, res) {
 
 }
 
-exports.listAnsDocuments = function (req, res) {
+exports.listMyAnsDocuments = function (req, res) {
 
     ensureToken(req, res)
     jwt.verify(req.token, 'Secret', function (err, data) {
@@ -93,6 +93,27 @@ exports.listAnsDocuments = function (req, res) {
             var query = { sort: { createdDate: 1 } }
 
             Doc.find({ medicalPersonalUsername: req.params.username }, null, query, function (err, doc) {
+                if (err) throw err
+                //console.log(user)
+                res.json(doc)
+            })
+            //Fin
+        }
+    });
+
+}
+
+exports.listreplyInboxDocuments = function (req, res) {
+
+    ensureToken(req, res)
+    jwt.verify(req.token, 'Secret', function (err, data) {
+        if (err) {
+            res.sendStatus(403);
+        } else {
+            //if Authenticated
+            var query = { sort: { createdDate: 1 } }
+
+            Doc.find({ clientUsername: req.params.username, medicalPersonalUsername: { $ne: 'x' } }, null, query, function (err, doc) {
                 if (err) throw err
                 //console.log(user)
                 res.json(doc)

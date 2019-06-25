@@ -31,6 +31,10 @@ var UserSchema = new Schema({
         type: String,
         Required: true
     },
+    profession:{
+        type: String,
+        Required: true
+    },
     createdDate:{
         type: Date,
         default :Date.now

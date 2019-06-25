@@ -25,6 +25,8 @@ exports.login = function (req, res) {
                         firstName: checkUser.firstName,
                         lastName: checkUser.lastName,
                         email: checkUser.email,
+                        userType: checkUser.userType,
+                        profession: checkUser.profession,
                         createdDate: checkUser.createdDate
                     }
                     var user = auser;
