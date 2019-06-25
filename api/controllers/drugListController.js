@@ -10,7 +10,7 @@ exports.listAllDrugs = function (req, res) {
             res.sendStatus(403);
         } else {
             //if Authenticated
-            var query = { sort: { createdDate: 1 } }
+            var query = { sort: { tradename: 1 } }
             Drug.find({}, null, query, function (err, drug) {
                 if (err) throw err
                 //console.log(user)

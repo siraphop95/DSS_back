@@ -11,7 +11,7 @@ exports.listAllDocuments = function (req, res) {
             res.sendStatus(403);
         } else {
             //if Authenticated
-            var query = { sort: { createdDate: 1 } }
+            var query = { sort: { createdDate: -1 } }
             Doc.find({}, null, query, function (err, doc) {
                 if (err) throw err
                 //console.log("user")
@@ -44,12 +44,13 @@ exports.createADocument = function (req, res) {
 exports.listNewQuestions = function (req, res) {
 
     ensureToken(req, res)
+    
     jwt.verify(req.token, 'Secret', function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
             //if Authenticated
-            var query = { sort: { createdDate: 1 } }
+            var query = { sort: { createdDate: -1 } }
             Doc.find({ medicalPersonalUsername: 'x' }, null, query, function (err, doc) {
                 if (err) throw err
                 //console.log(user)
@@ -69,7 +70,7 @@ exports.listMyQnDocuments = function (req, res) {
             res.sendStatus(403);
         } else {
             //if Authenticated
-            var query = { sort: { createdDate: 1 } }
+            var query = { sort: { createdDate: -1 } }
 
             Doc.find({ clientUsername: req.params.username , medicalPersonalUsername: 'x'}, null, query, function (err, doc) {
                 if (err) throw err
@@ -90,7 +91,7 @@ exports.listMyAnsDocuments = function (req, res) {
             res.sendStatus(403);
         } else {
             //if Authenticated
-            var query = { sort: { createdDate: 1 } }
+            var query = { sort: { modifiedDate: -1 } }
 
             Doc.find({ medicalPersonalUsername: req.params.username }, null, query, function (err, doc) {
                 if (err) throw err
@@ -111,7 +112,7 @@ exports.listreplyInboxDocuments = function (req, res) {
             res.sendStatus(403);
         } else {
             //if Authenticated
-            var query = { sort: { createdDate: 1 } }
+            var query = { sort: { modifiedDate: -1 } }
 
             Doc.find({ clientUsername: req.params.username, medicalPersonalUsername: { $ne: 'x' } }, null, query, function (err, doc) {
                 if (err) throw err
@@ -157,16 +158,17 @@ exports.deleteAUser = function(req, res){
 
 */
 exports.updateADocument = function (req, res) {
-
+    console.log("Test")
     ensureToken(req, res)
     jwt.verify(req.token, 'Secret', function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
             //if Authenticated
-            console.log(req.params.docId)
+            console.log("DATE:xx"+new Date())
             var newDoc = {}
             newDoc = req.body
+            newDoc.modifiedDate = new Date()
             console.log(newDoc)
             Doc.findByIdAndUpdate(req.params.docId, newDoc, { new: true }, function (err, doc) {
                 if (err) throw err

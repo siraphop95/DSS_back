@@ -19,7 +19,7 @@ var DocSchema = new Schema({
         type: String
     },
     questionType: {
-    
+
     },
     keywords: {
 
@@ -39,9 +39,9 @@ var DocSchema = new Schema({
     clientInfoETC: {
         type: String
     },
-    
+
     purpose: {
-        
+
     },
     fileURL: {
 
@@ -53,9 +53,9 @@ var DocSchema = new Schema({
         type: String,
         //Required: 'Please enter'
     },
-    createdDate:{
+    createdDate: {
         type: Date,
-        default :Date.now
+        default: Date.now
     },
     clientUsername: {
         type: String
@@ -65,6 +65,13 @@ var DocSchema = new Schema({
     },
     revisedQuestion: {
         type: String
+    },
+    docURL: {
+        type: String
+    },
+    modifiedDate: {
+        type: Date,
+        default: Date.now
     }
 })
 
