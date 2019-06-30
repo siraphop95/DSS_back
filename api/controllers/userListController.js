@@ -6,7 +6,7 @@ var jwt = require('jsonwebtoken')
 
 exports.listAllUsers = function (req, res) {
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
@@ -54,7 +54,7 @@ exports.createAUser = function (req, res) {
 
 exports.readAUser = function (req, res) {
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
@@ -71,7 +71,7 @@ exports.readAUser = function (req, res) {
 
 exports.deleteAUser = function (req, res) {
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
@@ -92,7 +92,7 @@ exports.deleteAUser = function (req, res) {
 
 exports.updateAUser = function (req, res) {
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {

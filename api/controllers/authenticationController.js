@@ -16,8 +16,8 @@ exports.login = function (req, res) {
             const hash = checkUser.password
             bcrypt.compare(password, hash, function (err, isValid) {
                 if (isValid) {
-                    var token = jwt.sign({ user: checkUser.id }, "Secret", {
-                        expiresIn: '24h' // expires in 24 hours
+                    var token = jwt.sign({ user: checkUser.id }, checkUser.id, {
+                        expiresIn: '7d' // expires in 24 hours
                     });
                     let auser = {
                         _id: checkUser._id,
@@ -30,6 +30,8 @@ exports.login = function (req, res) {
                         createdDate: checkUser.createdDate
                     }
                     var user = auser;
+                    // console.log(token)
+                    // console.log(user._id)
                     res.json({
                         user,
                         message: 'Authenticated! Use this token in the "Authorization" header',
@@ -47,10 +49,13 @@ exports.login = function (req, res) {
 
 exports.authentication = function (req, res) {
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    // console.log(req.headers.userid)
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
+            console.log("err")
             res.sendStatus(403);
         } else {
+            console.log("aut")
             res.sendStatus(200);
         }
     });

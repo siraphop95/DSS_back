@@ -6,7 +6,7 @@ var jwt = require('jsonwebtoken')
 
 exports.listAllDocuments = function (req, res) {
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
@@ -14,7 +14,7 @@ exports.listAllDocuments = function (req, res) {
             var query = { sort: { createdDate: -1 } }
             Doc.find({}, null, query, function (err, doc) {
                 if (err) throw err
-                //console.log("user")
+                //console.log("doc")
                 res.json(doc)
             })
             //Fin
@@ -26,7 +26,7 @@ exports.listAllDocuments = function (req, res) {
 exports.createADocument = function (req, res) {
 
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
@@ -45,7 +45,7 @@ exports.listNewQuestions = function (req, res) {
 
     ensureToken(req, res)
     
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
@@ -53,7 +53,7 @@ exports.listNewQuestions = function (req, res) {
             var query = { sort: { createdDate: -1 } }
             Doc.find({ medicalPersonalUsername: 'x' }, null, query, function (err, doc) {
                 if (err) throw err
-                //console.log(user)
+                //console.log(doc)
                 res.json(doc)
             })
             //Fin
@@ -65,7 +65,7 @@ exports.listNewQuestions = function (req, res) {
 exports.listMyQnDocuments = function (req, res) {
 
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
@@ -74,7 +74,8 @@ exports.listMyQnDocuments = function (req, res) {
 
             Doc.find({ clientUsername: req.params.username , medicalPersonalUsername: 'x'}, null, query, function (err, doc) {
                 if (err) throw err
-                //console.log(user)
+                //console.log(doc)
+                console.log("test")
                 res.json(doc)
             })
             //Fin
@@ -86,7 +87,7 @@ exports.listMyQnDocuments = function (req, res) {
 exports.listMyAnsDocuments = function (req, res) {
 
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
@@ -95,7 +96,7 @@ exports.listMyAnsDocuments = function (req, res) {
 
             Doc.find({ medicalPersonalUsername: req.params.username }, null, query, function (err, doc) {
                 if (err) throw err
-                //console.log(user)
+                //console.log(doc)
                 res.json(doc)
             })
             //Fin
@@ -107,7 +108,7 @@ exports.listMyAnsDocuments = function (req, res) {
 exports.listreplyInboxDocuments = function (req, res) {
 
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
@@ -116,7 +117,7 @@ exports.listreplyInboxDocuments = function (req, res) {
 
             Doc.find({ clientUsername: req.params.username, medicalPersonalUsername: { $ne: 'x' } }, null, query, function (err, doc) {
                 if (err) throw err
-                //console.log(user)
+                //console.log(doc)
                 res.json(doc)
             })
             //Fin
@@ -128,7 +129,7 @@ exports.listreplyInboxDocuments = function (req, res) {
 exports.readADocument = function (req, res) {
 
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
@@ -143,24 +144,34 @@ exports.readADocument = function (req, res) {
     });
 
 }
-/*
-exports.deleteAUser = function(req, res){
-    //console.log(req.params.userId)
-    User.findByIdAndRemove(req.params.userId, function(err, user){
-        if(err) throw err
-        const response = {
-            message: "Delete user id: "+ req.params.userId +" successfully",
-            id: user._id
+
+exports.deleteADocument = function(req, res){
+    //console.log(req.params.docId)
+
+    ensureToken(req, res)
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
+        if (err) {
+            res.sendStatus(403);
+        } else {
+            //if Authenticated
+            Doc.findByIdAndRemove(req.params.docId, function(err, doc){
+                if(err) throw err
+                const response = {
+                    message: "Delete doc id: "+ req.params.docId +" successfully",
+                    id: doc._id
+                }
+                res.json(response)
+            })
+            //Fin
         }
-        res.json(response)
-    })
+    });
 }
 
-*/
+
 exports.updateADocument = function (req, res) {
     console.log("Test")
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {

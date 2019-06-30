@@ -34,7 +34,7 @@ module.exports = function (app) {
 
     app.route('/documents/:docId')
         .get(docList.readADocument)
-        //    .delete(docList.deleteADocument)
+        .delete(docList.deleteADocument)
         .post(docList.updateADocument)
 
     app.route('/drugs')

@@ -5,7 +5,7 @@ var jwt = require('jsonwebtoken')
 
 exports.listAllDrugs = function (req, res) {
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {
@@ -24,7 +24,7 @@ exports.listAllDrugs = function (req, res) {
 
 exports.createADrug = function (req, res) {
     ensureToken(req, res)
-    jwt.verify(req.token, 'Secret', function (err, data) {
+    jwt.verify(req.token, req.headers.userid, function (err, data) {
         if (err) {
             res.sendStatus(403);
         } else {

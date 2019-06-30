@@ -72,6 +72,11 @@ var DocSchema = new Schema({
     modifiedDate: {
         type: Date,
         default: Date.now
+    },
+    flagID: {
+        type: String
+    },
+    flagTimer: {
     }
 })
 
